@@ -23,3 +23,8 @@ __pycache__/
 *.log
 .env
 .env.*
+
+# 本地数据文件（首次启动自动生成）
+data/db.json
+data/*.tmp
+data/*.bak-*

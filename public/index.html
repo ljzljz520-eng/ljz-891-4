@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>课程软件授权核验站</title>
+  <link rel="stylesheet" href="/css/common.css" />
+  <link rel="stylesheet" href="/css/index.css" />
+</head>
+<body>
+<div class="page">
+  <header class="topbar">
+    <div class="brand"><span class="logo">🎓</span> 课程软件授权核验站</div>
+    <a class="btn btn-default btn-sm" href="/admin">管理员登录</a>
+  </header>
+
+  <section class="hero">
+    <h1>课程软件授权信息查询</h1>
+    <p>输入老师或学生账号与授权码，即可查看授权课程、有效期、设备数量与开通时间</p>
+  </section>
+
+  <main class="query-wrap">
+    <div class="card query-card">
+      <form id="queryForm" autocomplete="off">
+        <div class="form-row">
+          <div class="field">
+            <label for="username">账号（学工号 / 登录账号）</label>
+            <input id="username" name="username" placeholder="例如 student01" maxlength="32" />
+          </div>
+          <div class="field">
+            <label for="code">授权码</label>
+            <input id="code" name="code" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary query-btn" id="submitBtn">
+          <span id="btnText">立即核验</span>
+        </button>
+        <p class="hint-line">授权码中的连字符“-”可以不输入，系统会自动识别 · 查询过程不会改变您的授权</p>
+
+        <details class="demo-box">
+          <summary>演示账号与授权码（点击展开）</summary>
+          <ul>
+            <li>正常使用：<code>student01</code> + <code>K7MP-Q2WE-8XHA-N4TV</code></li>
+            <li>教师多机授权：<code>teacher01</code> + <code>ZR9F-5KJL-VCB6-M3QD</code></li>
+            <li>未绑定新码（任意已开通账号首次核验自动绑定）：<code>UNBN-8D2K-Q5RM-X7SZ</code></li>
+            <li>已停用授权（演示提示）：任意账号 + <code>REV0-KED0-LIC0-0000</code></li>
+            <li>停用账号：<code>student02</code>；过期授权可用其账号 + <code>P4WX-7HBN-YT2E-9FKA</code></li>
+          </ul>
+        </details>
+      </form>
+    </div>
+
+    <!-- 查询成功 -->
+    <section class="result card" id="resultPanel" aria-live="polite"></section>
+
+    <!-- 查询失败 -->
+    <section class="fail-panel" id="failPanel" aria-live="polite">
+      <h3>⚠️ <span id="failTitle">暂时无法完成核验</span></h3>
+      <p class="lead" id="failMessage"></p>
+      <h4>可能的原因</h4>
+      <ul class="reasons" id="failReasons"></ul>
+      <h4>建议您这样处理</h4>
+      <ul class="suggestions" id="failSuggestions"></ul>
+      <div class="actions">
+        <button class="btn btn-primary" onclick="document.getElementById('username').focus()">重新输入</button>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="toast"></div>
+<script src="/js/device.js"></script>
+<script src="/js/common-ui.js"></script>
+<script src="/js/index.js"></script>
+</body>
+</html>

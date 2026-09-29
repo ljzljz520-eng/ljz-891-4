@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>管理后台 · 课程软件授权核验站</title>
+  <link rel="stylesheet" href="/css/common.css" />
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body>
+
+<!-- 登录页 -->
+<div id="loginPage" class="login-page">
+  <form class="login-card" id="loginForm">
+    <div class="brand"><span class="logo">🛡️</span>
+      <div><div style="font-size:17px">授权管理后台</div><div style="font-size:12px;color:var(--gray);font-weight:400">课程软件授权核验站</div></div>
+    </div>
+    <div class="field">
+      <label for="loginUser">管理员账号</label>
+      <input id="loginUser" placeholder="admin" autocomplete="username" />
+    </div>
+    <div class="field">
+      <label for="loginPass">管理员密码</label>
+      <input id="loginPass" type="password" placeholder="请输入密码" autocomplete="current-password" />
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:11px" id="loginBtn">登录</button>
+    <div id="loginError" class="login-error" style="display:none"></div>
+    <div class="login-foot">
+      <a href="/">← 返回核验首页</a>
+      <span>演示：admin / admin123</span>
+    </div>
+  </form>
+</div>
+
+<!-- 后台主体 -->
+<div id="appPage" style="display:none">
+  <aside class="sidebar">
+    <div class="side-brand"><span class="logo">🎓</span> 授权管理后台</div>
+    <nav class="nav">
+      <a class="nav-item active" data-tab="dashboard"><span>📊</span> 概览</a>
+      <a class="nav-item" data-tab="licenses"><span>🔑</span> 授权管理</a>
+      <a class="nav-item" data-tab="accounts"><span>👥</span> 账号管理</a>
+      <a class="nav-item" data-tab="products"><span>📦</span> 产品管理</a>
+    </nav>
+    <div class="side-foot">
+      <a href="/" target="_blank">打开核验页 ↗</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <h2 id="pageTitle">概览</h2>
+      <div class="top-right">
+        <span class="admin-name">👤 <span id="adminUser">admin</span></span>
+        <button class="btn btn-default btn-sm" id="changePwdBtn">修改密码</button>
+        <button class="btn btn-default btn-sm" id="logoutBtn">退出登录</button>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- 概览 -->
+      <section class="tab-panel" data-panel="dashboard">
+        <div class="stat-grid" id="statGrid"></div>
+        <div class="card" style="margin-top:18px">
+          <h3 class="card-title">最近核验记录</h3>
+          <table>
+            <thead><tr><th>时间</th><th>账号</th><th>授权码</th><th>结果</th><th>原因/状态</th><th>来源 IP</th></tr></thead>
+            <tbody id="logTbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 授权管理 -->
+      <section class="tab-panel" data-panel="licenses" style="display:none">
+        <div class="toolbar">
+          <select id="licenseStatusFilter" style="width:150px">
+            <option value="">全部状态</option>
+            <option value="active">使用中</option>
+            <option value="expiring">30天内到期</option>
+            <option value="expired">已过期</option>
+            <option value="revoked">已停用</option>
+          </select>
+          <input id="licenseSearch" placeholder="按授权码搜索" style="width:240px" />
+          <button class="btn btn-default btn-sm" id="licenseSearchBtn">搜索</button>
+          <div style="flex:1"></div>
+          <button class="btn btn-primary" id="addLicenseBtn">＋ 添加授权</button>
+        </div>
+        <div class="card">
+          <table>
+            <thead>
+              <tr><th>授权码</th><th>课程产品</th><th>绑定账号</th><th>状态</th><th>设备</th><th>有效期</th><th>开通时间</th><th>操作</th></tr>
+            </thead>
+            <tbody id="licenseTbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 账号管理 -->
+      <section class="tab-panel" data-panel="accounts" style="display:none">
+        <div class="toolbar">
+          <input id="accountSearch" placeholder="搜索账号或姓名" style="width:260px" />
+          <button class="btn btn-default btn-sm" id="accountSearchBtn">搜索</button>
+          <div style="flex:1"></div>
+          <button class="btn btn-primary" id="addAccountBtn">＋ 添加账号</button>
+        </div>
+        <div class="card">
+          <table>
+            <thead>
+              <tr><th>账号</th><th>姓名</th><th>身份</th><th>状态</th><th>授权数</th><th>创建时间</th><th>操作</th></tr>
+            </thead>
+            <tbody id="accountTbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 产品管理 -->
+      <section class="tab-panel" data-panel="products" style="display:none">
+        <div class="toolbar">
+          <div style="flex:1;color:var(--text-2);font-size:13px">维护课程软件产品，下架后不影响已发放的授权</div>
+          <button class="btn btn-primary" id="addProductBtn">＋ 添加产品</button>
+        </div>
+        <div class="card">
+          <table>
+            <thead>
+              <tr><th>产品名称</th><th>产品编号</th><th>说明</th><th>状态</th><th>创建时间</th><th>操作</th></tr>
+            </thead>
+            <tbody id="productTbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script src="/js/common-ui.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>

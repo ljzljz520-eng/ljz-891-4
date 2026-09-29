@@ -1,0 +1,115 @@
+.page {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 500px at 80% -100px, rgba(47, 84, 235, .12), transparent),
+    linear-gradient(180deg, #eef3ff 0%, var(--bg) 320px);
+}
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 960px; margin: 0 auto; padding: 20px 20px 0;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; color: var(--primary-dark); }
+.brand .logo {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), #722ed1);
+  display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px;
+}
+.hero { max-width: 960px; margin: 0 auto; padding: 36px 20px 0; text-align: center; }
+.hero h1 { font-size: 30px; margin-bottom: 10px; letter-spacing: .5px; }
+.hero p { color: var(--text-2); font-size: 15px; }
+
+.query-wrap { max-width: 720px; margin: 28px auto 60px; padding: 0 20px; }
+.query-card { padding: 30px; }
+.form-row { display: flex; gap: 14px; margin-bottom: 16px; }
+.form-row .field { flex: 1; margin-bottom: 0 !important; }
+.field { margin-bottom: 16px; }
+.field input { padding: 12px 14px; font-size: 15px; }
+.query-btn { width: 100%; padding: 13px; font-size: 16px; }
+.hint-line {
+  margin-top: 14px; font-size: 12.5px; color: var(--gray); text-align: center;
+}
+
+/* 结果卡片 */
+.result { margin-top: 24px; display: none; }
+.result.show { display: block; animation: pop .25s ease; }
+.result-head {
+  display: flex; align-items: center; gap: 12px; padding-bottom: 16px;
+  border-bottom: 1px dashed var(--border); margin-bottom: 18px;
+}
+.result-head .avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--primary-light); color: var(--primary);
+  display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600;
+}
+.result-head .who { flex: 1; }
+.result-head .who .name { font-weight: 600; font-size: 16px; }
+.result-head .who .sub { font-size: 12.5px; color: var(--gray); }
+
+.course-name { font-size: 19px; font-weight: 700; margin-bottom: 4px; }
+.course-code { font-size: 12.5px; color: var(--gray); margin-bottom: 18px; }
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.info-item {
+  background: #fafbfc; border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px;
+}
+.info-item .k { font-size: 12px; color: var(--gray); margin-bottom: 4px; }
+.info-item .v { font-size: 16px; font-weight: 600; }
+.info-item .v small { font-weight: 400; color: var(--gray); font-size: 12px; margin-left: 4px; }
+.info-item.full { grid-column: 1 / -1; }
+
+.state-banner {
+  border-radius: 10px; padding: 12px 16px; font-size: 13.5px;
+  display: flex; gap: 10px; align-items: flex-start; margin-bottom: 14px;
+}
+.state-banner .icon { font-size: 17px; line-height: 1.4; }
+.state-expiring { background: #fff7e6; color: #ad4e00; border: 1px solid #ffd591; }
+.state-expired { background: #fff1f0; color: #a8071a; border: 1px solid #ffa39e; }
+
+.devices { font-size: 13px; }
+.devices .d {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px; background: #fafbfc; border: 1px solid var(--border);
+  border-radius: 8px; margin-top: 8px;
+}
+.devices .d .meta { color: var(--gray); font-size: 12px; }
+
+/* 失败提示面板 */
+.fail-panel {
+  margin-top: 24px;
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--warning);
+  padding: 26px 30px;
+  display: none;
+}
+.fail-panel.show { display: block; animation: pop .25s ease; }
+.fail-panel h3 { font-size: 18px; margin-bottom: 6px; color: #d46b08; display: flex; gap: 8px; align-items: center; }
+.fail-panel .lead { color: var(--text-2); font-size: 14px; margin-bottom: 16px; }
+.fail-panel h4 { font-size: 13.5px; color: var(--text); margin: 12px 0 8px; }
+.fail-panel ul { padding-left: 20px; color: var(--text-2); font-size: 13.5px; }
+.fail-panel ul li { margin-bottom: 5px; }
+.fail-panel ul.suggestions li::marker { color: var(--success); }
+.fail-panel ul.reasons li::marker { color: var(--warning); }
+.fail-panel .actions { margin-top: 18px; display: flex; gap: 10px; }
+
+.demo-box {
+  margin-top: 18px; background: var(--primary-light); border: 1px dashed #adc6ff;
+  border-radius: 10px; padding: 12px 16px; font-size: 12.5px; color: var(--primary-dark);
+}
+.demo-box summary { cursor: pointer; font-weight: 600; }
+.demo-box ul { margin: 8px 0 0; padding-left: 18px; }
+.demo-box code {
+  background: rgba(255,255,255,.7); padding: 1px 6px; border-radius: 4px; font-size: 12px;
+}
+@media (max-width: 600px) {
+  .form-row { flex-direction: column; }
+  .info-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 23px; }
+}
