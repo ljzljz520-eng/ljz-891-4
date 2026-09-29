@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>课程软件授权核验站</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="brand"><span class="logo">🎓</span>课程软件授权核验站</div>
+    <nav class="header-links">
+      <a href="/">授权查询</a>
+      <a href="/admin.html">管理员入口</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <h1>授权信息一键核验</h1>
+    <p>请输入您的<strong>账号</strong>与购买/领取的<strong>授权码</strong>，即可查询已授权的课程、有效期、可登录设备数量及开通时间。信息仅供本人核验，请勿向他人泄露授权码。</p>
+  </section>
+
+  <div class="query-card">
+    <form id="queryForm" autocomplete="off">
+      <div class="field">
+        <label for="account">账号</label>
+        <input id="account" name="account" placeholder="请输入老师或学生账号，如 teacher01" maxlength="64" required>
+      </div>
+      <div class="field">
+        <label for="authCode">授权码</label>
+        <input id="authCode" name="authCode" placeholder="格式：EDU-XXXX-XXXX-XXXX" maxlength="32" required
+               style="font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:1px;text-transform:uppercase">
+        <div class="hint">授权码不区分大小写，可直接粘贴（含或不含“-”均可）。</div>
+      </div>
+      <button class="btn btn-primary" id="queryBtn" type="submit">立即核验</button>
+    </form>
+  </div>
+
+  <div id="result" class="result"></div>
+
+  <p class="foot-note">
+    演示账号：teacher01 / 授权码 EDU-DEMO-2026-TEAC（有效）·
+    student01 / EDU-DEMO-2026-STUD（已到期）·
+    student02 / EDU-DEMO-2026-STOP（已停用）
+  </p>
+</main>
+
+<script src="/query.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "course-license-hub",
+  "version": "1.0.0",
+  "description": "课程软件授权核验站（零依赖，Node.js 内置模块实现）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": { "node": ">=18" }
+}

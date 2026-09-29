@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理后台 · 课程软件授权核验站</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="brand"><span class="logo">🎓</span>授权管理后台</div>
+    <nav class="header-links">
+      <a href="/" target="_blank">查询首页</a>
+      <a href="#" id="logoutLink">退出登录</a>
+    </nav>
+  </div>
+</header>
+
+<div class="admin-wrap">
+  <aside class="sidebar">
+    <div class="nav-item active" data-page="overview"><span class="ic">📊</span>概览</div>
+    <div class="nav-item" data-page="licenses"><span class="ic">🔑</span>授权管理</div>
+    <div class="nav-item" data-page="products"><span class="ic">📦</span>产品管理</div>
+    <div class="nav-item" id="navAdmin"><span class="ic">👤</span><span id="adminName">管理员</span></div>
+  </aside>
+
+  <main class="admin-main">
+    <!-- 概览 -->
+    <section id="page-overview">
+      <h2 class="page-title">数据概览</h2>
+      <p class="page-sub">全部授权与产品的整体情况</p>
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="panel">
+        <div class="panel-head"><h3>使用说明</h3></div>
+        <ul class="small" style="margin:0;padding-left:20px;color:#444;line-height:2">
+          <li><strong>添加授权</strong>：在“授权管理”中为师生账号开通课程，系统可自动生成授权码，也支持自定义。</li>
+          <li><strong>停用账号</strong>：对违规或设备数超限的授权执行停用，停用后查询页将提示停用原因，不再展示课程明细。</li>
+          <li><strong>产品管理</strong>：维护课程软件的名称、版本及上下架状态；下架后不可被新授权选择。</li>
+          <li>授权状态依据有效期自动判定：有效、15 天内到期（即将到期）、已到期。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 授权管理 -->
+    <section id="page-licenses" style="display:none">
+      <h2 class="page-title">授权管理</h2>
+      <p class="page-sub">开通、查询、编辑与停用师生授权</p>
+      <div class="panel">
+        <div class="panel-head">
+          <h3>授权列表</h3>
+          <div class="toolbar">
+            <input id="searchInput" placeholder="账号 / 姓名 / 授权码" style="min-width:200px">
+            <select id="filterStatus">
+              <option value="">全部状态</option>
+              <option value="active">有效/未到期</option>
+              <option value="disabled">已停用</option>
+            </select>
+            <select id="filterProduct"><option value="">全部产品</option></select>
+            <button class="btn btn-primary btn-sm" id="addLicenseBtn" style="width:auto;padding:9px 16px">＋ 添加授权</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table id="licenseTable">
+            <thead>
+              <tr>
+                <th>账号 / 使用人</th><th>授权码</th><th>课程</th><th>设备</th>
+                <th>开通时间</th><th>有效期至</th><th>状态</th><th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="licenseTbody"></tbody>
+          </table>
+        </div>
+        <div class="pager">
+          <span id="totalText"></span>
+          <button class="btn btn-ghost btn-sm" id="prevPage">上一页</button>
+          <span id="pageText"></span>
+          <button class="btn btn-ghost btn-sm" id="nextPage">下一页</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 产品管理 -->
+    <section id="page-products" style="display:none">
+      <h2 class="page-title">产品管理</h2>
+      <p class="page-sub">维护课程软件产品信息与上下架状态</p>
+      <div class="panel">
+        <div class="panel-head">
+          <h3>产品列表</h3>
+          <button class="btn btn-primary btn-sm" id="addProductBtn" style="width:auto;padding:9px 16px">＋ 添加产品</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr><th>产品名称</th><th>版本</th><th>状态</th><th>关联授权数</th><th>操作</th></tr></thead>
+            <tbody id="productTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- 添加/编辑授权模态框 -->
+<div class="modal-mask" id="licenseModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="licenseModalTitle">添加授权</h3>
+      <button class="modal-close" data-close="licenseModal">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="licId">
+      <div class="field">
+        <label>账号 <span style="color:var(--red)">*</span></label>
+        <input id="licAccount" placeholder="如 teacher01（3-64 位字母/数字/_ . @ -）">
+      </div>
+      <div class="field">
+        <label>使用人姓名</label>
+        <input id="licHolder" placeholder="选填，如 王老师">
+      </div>
+      <div class="field">
+        <label>授权课程 <span style="color:var(--red)">*</span></label>
+        <div class="checkbox-grid" id="licProducts"></div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>设备数量上限 <span style="color:var(--red)">*</span></label>
+          <input id="licDeviceLimit" type="number" min="1" max="999" value="2">
+        </div>
+        <div class="field" id="licDevicesUsedWrap">
+          <label>已绑定设备数</label>
+          <input id="licDevicesUsed" type="number" min="0" value="0">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field" id="licActivatedWrap">
+          <label>开通时间</label>
+          <input id="licActivated" type="datetime-local">
+        </div>
+        <div class="field" id="licValidDaysWrap">
+          <label>有效天数</label>
+          <input id="licValidDays" type="number" min="1" max="3650" value="365">
+        </div>
+      </div>
+      <div class="field" id="licExpiresWrap" style="display:none">
+        <label>到期时间</label>
+        <input id="licExpires" type="datetime-local">
+      </div>
+      <div class="field">
+        <label>授权码</label>
+        <input id="licAuthCode" placeholder="留空则自动生成，或自定义 EDU-XXXX-XXXX-XXXX"
+               style="font-family:ui-monospace,Menlo,Consolas,monospace">
+      </div>
+      <div class="field">
+        <label>备注</label>
+        <textarea id="licNote" rows="2" placeholder="选填，如采购批次、停用原因等"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" data-close="licenseModal">取消</button>
+      <button class="btn btn-primary" id="saveLicenseBtn" style="width:auto">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 停用原因模态框 -->
+<div class="modal-mask" id="disableModal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head">
+      <h3>停用授权</h3>
+      <button class="modal-close" data-close="disableModal">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="small" style="margin-top:0">停用后，该账号在查询页将看到“授权已停用”提示及原因，无法核验课程信息。</p>
+      <div class="field">
+        <label>停用原因（将向用户展示）</label>
+        <textarea id="disableReason" rows="3" placeholder="如：设备登录数超出授权上限，请联系管理员"></textarea>
+      </div>
+      <input type="hidden" id="disableId">
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" data-close="disableModal">取消</button>
+      <button class="btn btn-danger btn" id="confirmDisableBtn" style="border:none">确认停用</button>
+    </div>
+  </div>
+</div>
+
+<!-- 添加/编辑产品模态框 -->
+<div class="modal-mask" id="productModal">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-head">
+      <h3 id="productModalTitle">添加产品</h3>
+      <button class="modal-close" data-close="productModal">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="prodId">
+      <div class="field">
+        <label>产品名称 <span style="color:var(--red)">*</span></label>
+        <input id="prodName" placeholder="如：高等数学精讲课程包">
+      </div>
+      <div class="field">
+        <label>版本号</label>
+        <input id="prodVersion" placeholder="如 v1.0">
+      </div>
+      <div class="field" id="prodStatusWrap">
+        <label>上架状态</label>
+        <select id="prodStatus">
+          <option value="on">上架（可被新授权选择）</option>
+          <option value="off">下架（停止新开通）</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" data-close="productModal">取消</button>
+      <button class="btn btn-primary" id="saveProductBtn" style="width:auto">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="/dashboard.js"></script>
+</body>
+</html>
